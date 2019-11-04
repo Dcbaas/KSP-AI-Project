@@ -1,4 +1,4 @@
-# Setting Up KSP with kRPC
+# Setting Up KSP with kRPC (WINDOWS)
 
 _Note: setup instructions for kRPC can be found [here](https://krpc.github.io/krpc/getting-started.html)_
 
