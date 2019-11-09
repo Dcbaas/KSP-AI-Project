@@ -14,6 +14,10 @@ class Game:
     :var self.vessel The ship currently prepared to launch
     """
 
+    def restart(self):
+        """Reload game (name is SHgame)"""
+        self.conn.space_center.load("SHgame")  # will save game as SHgame.sfs
+
     def hasFailed(self) -> bool:
         """Defines situations for a failed launch"""
         if not self.vessel.situation.pre_launch and self.vessel.speed == 0:  # vessel has stopped
@@ -84,8 +88,9 @@ class Game:
                 break
 
     def __init__(self):
-        """Connect to KSP kRPC server"""
+        """Connect to KSP kRPC server and get variables"""
         self.conn = krpc.connect(name="SnakeHaterz")
         print(self.conn.getStatus())
         self.kerbin = self.conn.space_center.bodies["Kerbin"]
         self.vessel = self.conn.space_center.active_vessel
+        self.flight = self.vessel.flight(self.kerbin.reference_frame)
