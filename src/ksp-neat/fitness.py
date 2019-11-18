@@ -1,4 +1,8 @@
+import time
+
 import krpc
+import neat
+
 from stats_monitor import Monitor
 
 def is_stable_orbit(monitor):
@@ -40,3 +44,17 @@ def calc_fitness(monitor):
         score = START_POINTS - 1000000 - (500000 * 1/(monitor.closest_approach - TARGET_CLOSEST_APPROACH))
 
         #TODO Write the final landing condition. Reverse the order to have landing condition be first and pre orbit last
+
+
+def eval_genomes(genomes, config, game_controller):
+    """Executes genome actions and sets their resulting fitness"""
+    for genome_id, genome in genomes:
+        # recurrent nn allows us to go back to previous decisions and iterate
+        net = neat.nn.RecurrentNetwork.create(genome, config)
+        game_controller.restart()  # load game
+        monitor = Monitor()
+        time.sleep(3)  # TODO: determine time for game to load
+        game_controller.launch()  # prepare to fly
+        # while game_controller.not_failed(): TODO
+        #  fly ship!
+        genome.fitness = calc_fitness(monitor)  # where does the score come from?
