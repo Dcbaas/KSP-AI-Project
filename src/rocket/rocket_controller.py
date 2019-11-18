@@ -13,7 +13,7 @@ class RocketController:
     """
     def __init__(self, vessel):
         """
-        Initializes the RocketController. Sets certian fields to ensure the autopilot works correctly
+        Initializes the RocketController. Sets certain fields to ensure the autopilot works correctly
         :param vessel: the vessel object that this RocketController will control
         """
         self.vessel = vessel
