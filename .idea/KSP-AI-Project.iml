@@ -5,6 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rocket" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/ksp-neat" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/client" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
