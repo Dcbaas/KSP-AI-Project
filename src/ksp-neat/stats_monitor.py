@@ -1,6 +1,7 @@
 import krpc
 import sys
 
+
 class Monitor:
     """
     When nonprofitgibi ran his orbit AI for ksp he has a monitor track the max values
