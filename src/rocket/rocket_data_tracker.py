@@ -37,3 +37,17 @@ class RocketData:
         """
         orbit = self.orbit()
         return np.array((orbit.body, orbit.apoapsis_altitude, orbit.periapsis_altitude))
+
+    @property
+    def asses_fligh(self) -> bool:
+      # zero fuel condition
+      # zero altitude after x time condition
+
+      # wrong direction condition sphere of influence closeset approach value  should be betweeen 150 and  
+      # checking if our sphere of inlfuence is not the moon or the earth 
+
+      # damaged rocket condition
+      # Insuficient electric power
+      # vesel not in ocean condition 
+      # vesel not escaping condition 
+      # rocket got detroyed condition
