@@ -1,7 +1,7 @@
 """This should provide functionality for game functions/setup. Everything dealing indirectly with the rocket."""
 
 
-class RocketSetup:
+class GameController:
     """
     Contains all functions related to setting up the game for handling launching and managing connections
     """
