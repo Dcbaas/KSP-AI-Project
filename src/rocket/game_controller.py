@@ -17,7 +17,7 @@ class GameController:
         # do we have to recreate rocket controller?
         self.rocket_controller.update_controls(
             self.rocket_controller.control.pitch,
-            self.rocket_controller.vessel.flight.heading,
+            self.rocket_controller.vessel.flight().heading,
             self.rocket_controller.control.roll,
             self.rocket_controller.control.throttle,
         )

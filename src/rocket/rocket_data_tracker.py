@@ -9,20 +9,29 @@ class RocketData:
         DEST_LOC = np.array((-0.49409718944856473, 59.473877823389955))
         self.connection = connection
         self.mun_target = connection.space_center.bodies['Mun']
+<<<<<<< HEAD
         self.connection.space_center.target_body = self.mun_target #what is this line of code doing ?
         self.vessel = connection.space_center.active_vessel
         self.start_time = time.time() # I get the initial time of the program in order to keep track of duration
+=======
+        self.connection.space_center.target_body = self.mun_target
+        vessel = connection.space_center.active_vessel
+        flight = vessel.flight(vessel.orbit.body.reference_frame)
+>>>>>>> 6b052627d498ba9fb7f877ff57f69c88f688d1ea
 
+        self.speed = connection.add_stream(getattr, flight, 'speed')
 
         self.position = connection.add_stream(vessel.position, self.mun_target.reference_frame)
         self.CARTESIAN_POS = np.array(self.mun_target.surface_position(DEST_LOC[0], DEST_LOC[1], self.mun_target.reference_frame))
-
-        self.situation = connection.add_stream(vessel.situation)
-        self.orbit = connection.add_stream(vessel.orbit)
+        self.situation = connection.add_stream(getattr, vessel, 'situation')
+        self.orbit = connection.add_stream( getattr, vessel, 'orbit')
 
     def get_distance(self):
         basis_dist = self.CARTESIAN_POS - np.array(self.position())
         return la.norm(basis_dist)
+
+    def get_speed(self):
+        return self.speed()
 
     def get_situation(self):
         # Isn't this situation the one retrieved from the vesel ?
@@ -39,6 +48,7 @@ class RocketData:
         :return: an np array with the fields above
         """
         orbit = self.orbit()
+<<<<<<< HEAD
         return np.array((orbit.body, orbit.apoapsis_altitude, orbit.periapsis_altitude))
 
     def getResourcesAmount(self, vessel) -> List[float]:
@@ -67,3 +77,9 @@ class RocketData:
           return False
 
       # zero electric charge condition
+=======
+        return orbit.body.name, orbit.apoapsis_altitude, orbit.periapsis_altitude
+
+    def get_closest_approach(self):
+        return self.mun_target.orbit.distance_at_closest_approach(self.orbit())
+>>>>>>> 6b052627d498ba9fb7f877ff57f69c88f688d1ea
