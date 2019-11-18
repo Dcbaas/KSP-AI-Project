@@ -11,6 +11,7 @@ class Monitor:
         # While launching from Kerbin
         self.max_ap = 0
         self.max_pe = 0
+        self.body_name = ''
 
         # While performing transfer
         self.closest_approach = sys.maxsize
@@ -21,13 +22,16 @@ class Monitor:
         # TODO maybe we want to be able to load previous data from file in case of crash
         self.final_situation = None
 
-    def set_max_ap(self, ap:int) -> None:
+    def set_max_ap(self, ap) -> None:
         if ap > self.max_ap:
             self.max_ap = ap
 
-    def set_max_pe(self, pe:int) -> None:
+    def set_max_pe(self, pe) -> None:
         if pe > self.max_pe:
             self.max_pe = pe
+
+    def set_body_name(self, name):
+        self.body_name = name
 
     def set_closest_approach(self, dist) -> None:
         if dist < self.closest_approach:
@@ -37,8 +41,8 @@ class Monitor:
         if dist < self.closest_landing_dist:
             self.closest_landing_dist = dist
 
-    def set_lowest_speed_at_touchdown(self, speed, body) -> None:
-        if body.name is 'Mun' and speed < self.lowest_speed_at_touchdown:
+    def set_lowest_speed_at_touchdown(self, speed) -> None:
+        if speed < self.lowest_speed_at_touchdown:
             self.lowest_speed_at_touchdown = speed
 
     def set_final_situation(self, situation):
