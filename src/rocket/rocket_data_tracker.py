@@ -10,17 +10,21 @@ class RocketData:
         self.mun_target = connection.space_center.bodies['Mun']
         self.connection.space_center.target_body = self.mun_target
         vessel = connection.space_center.active_vessel
+        flight = vessel.flight(vessel.orbit.body.reference_frame)
 
+        self.speed = connection.add_stream(getattr, flight, 'speed')
 
         self.position = connection.add_stream(vessel.position, self.mun_target.reference_frame)
         self.CARTESIAN_POS = np.array(self.mun_target.surface_position(DEST_LOC[0], DEST_LOC[1], self.mun_target.reference_frame))
-
-        self.situation = connection.add_stream(vessel.situation)
-        self.orbit = connection.add_stream(vessel.orbit)
+        self.situation = connection.add_stream(getattr, vessel, 'situation')
+        self.orbit = connection.add_stream( getattr, vessel, 'orbit')
 
     def get_distance(self):
         basis_dist = self.CARTESIAN_POS - np.array(self.position())
         return la.norm(basis_dist)
+
+    def get_speed(self):
+        return self.speed()
 
     def get_situation(self):
         return self.situation()
@@ -36,18 +40,7 @@ class RocketData:
         :return: an np array with the fields above
         """
         orbit = self.orbit()
-        return np.array((orbit.body, orbit.apoapsis_altitude, orbit.periapsis_altitude))
+        return orbit.body.name, orbit.apoapsis_altitude, orbit.periapsis_altitude
 
-    @property
-    def asses_fligh(self) -> bool:
-      # zero fuel condition
-      # zero altitude after x time condition
-
-      # wrong direction condition sphere of influence closeset approach value  should be betweeen 150 and  
-      # checking if our sphere of inlfuence is not the moon or the earth 
-
-      # damaged rocket condition
-      # Insuficient electric power
-      # vesel not in ocean condition 
-      # vesel not escaping condition 
-      # rocket got detroyed condition
+    def get_closest_approach(self):
+        return self.mun_target.orbit.distance_at_closest_approach(self.orbit())
