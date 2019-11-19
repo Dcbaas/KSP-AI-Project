@@ -68,7 +68,7 @@ def eval_genomes(genomes, config):
         game_controller.launch(rocket_data)  # prepare to fly
         start = time.time()
         elapsed = 0
-        while elapsed < 60:  # TODO: add failure condition, set time correctly (currently 60 secs)
+        while elapsed < 3600:  # TODO: add failure condition, set time correctly (currently 60 secs)
             #  fly ship!
             genome.fitness = calc_fitness(monitor)  # where does the score come from?
             elapsed = time.time() - start

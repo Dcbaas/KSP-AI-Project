@@ -26,7 +26,7 @@ class RocketController:
 
         self.auto_pilot.engage()
 
-    def update_controls(self, pitch, heading, roll, throttle, sas=False, rcs=False, landing_gear=False):
+    def update_controls(self, pitch, heading, roll, throttle, sas=False, rcs=False):
         """
         TODO: Implement comments
         :param pitch:
@@ -41,7 +41,6 @@ class RocketController:
         self.auto_pilot.target_pitch_and_heading(pitch, heading)
         self.control.roll = roll
         self.control.throttle = throttle
-        self.control.legs = landing_gear
         self.control.sas = sas
         self.control.rcs = rcs
 

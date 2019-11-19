@@ -16,6 +16,10 @@ class RocketData:
         self.parts_list = [(p.name, p.decouple_stage) for p in self.vessel.parts.all]
         self.stage = max(p.decouple_stage for p in self.vessel.parts.all)
 
+        """
+        Inputs
+        pitch, heading, roll, throttle, fuel remaining, all orbit stats, velocity, dynamic pressure
+        """
 
     def get_situation(self):
         return self.situation()
@@ -34,12 +38,9 @@ class RocketData:
 
         return orbit.apoapsis_altitude, orbit.periapsis_altitude, orbit.inclination, orbit.eccentricity
 
-    def getResourcesAmount(self):
+    def get_remaining_fuel(self):
         return [self.vessel.resourses.amount["LiquidFuel"], self.vessel.resourses.amount["Oxidizer"],
                 self.vessel.resourses.amount["ElectricCharge"]]
-
-    def getSituation(self):
-        return self.vessel.situation
 
     def is_valid_flight(self) -> bool:
         # zero altitude after x time condition

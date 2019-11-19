@@ -60,15 +60,3 @@ def update_monitor(monitor, rocket_data:RocketData):
     monitor.set_max_pe(orbit_data[2])
     monitor.set_body_name(orbit_data[0])
 
-# connection = krpc.connect(name='distance_test')
-#
-# dataObject = RocketData(connection)
-# monitor = Monitor()
-# while True:
-#     update_monitor(monitor, dataObject)
-#     score = fitness.calc_fitness(monitor)
-#     print(score)
-#
-#
-# connection.close()
-# print(monitor)
