@@ -14,6 +14,7 @@ class Monitor:
         self.max_pe = 0
         self.best_eccentricity = sys.maxsize
         self.best_inclination = sys.maxsize
+        self.max_horizontal_speed = 0
 
 
         # TODO maybe we want to be able to load previous data from file in case of crash
@@ -37,3 +38,7 @@ class Monitor:
 
     def set_final_situation(self, situation):
         self.final_situation = situation
+
+    def set_max_horizontal_speed(self, speed):
+        if speed > self.max_horizontal_speed:
+            self.max_horizontal_speed = speed
