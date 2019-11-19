@@ -1,4 +1,5 @@
 #TODO: add import statements
+from rocket_data_tracker import RocketData
 """This should provide functionality for game functions/setup. Everything dealing indirectly with the rocket."""
 
 
@@ -22,7 +23,7 @@ class GameController:
             self.rocket_controller.control.throttle,
         )
 
-    def launch(self):
+    def launch(self, rocket_data:RocketData):
         """Set up launch for AI"""
         self.connection.space_center.save("SHgame")  # will save game as SHgame.sfs
-        self.rocket_controller.stage_rocket()
+        self.rocket_controller.stage_rocket(rocket_data)

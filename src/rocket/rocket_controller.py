@@ -1,4 +1,5 @@
 import krpc
+from rocket_data_tracker import RocketData
 
 
 class RocketController:
@@ -44,11 +45,12 @@ class RocketController:
         self.control.sas = sas
         self.control.rcs = rcs
 
-    def stage_rocket(self):
+    def stage_rocket(self, rocket_data:RocketData):
         """
         TODO implement comments
         :return:
         """
         self.control.activate_next_stage()
+        rocket_data.stage -= 1
 
 
