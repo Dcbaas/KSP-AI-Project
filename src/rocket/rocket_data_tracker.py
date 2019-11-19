@@ -8,11 +8,11 @@ from typing import List
 class RocketData:
     def __init__(self, connection):
         self.connection = connection
-        self.vessel = connection.space_center.active_vessel
+        self.vessel = self.connection.space_center.active_vessel
         self.start_time = time.time()  # I get the initial time of the program in order to keep track of duration
 
-        self.situation = connection.add_stream(getattr, self.vessel, 'situation')
-        self.orbit = connection.add_stream(getattr, self.vessel, 'orbit')
+        self.situation = self.connection.add_stream(getattr, self.vessel, 'situation')
+        self.orbit = self.connection.add_stream(getattr, self.vessel, 'orbit')
         self.parts_list = [(p.name, p.decouple_stage) for p in self.vessel.parts.all]
         self.stage = max(p.decouple_stage for p in self.vessel.parts.all)
 
@@ -20,6 +20,20 @@ class RocketData:
         Inputs
         pitch, heading, roll, throttle, fuel remaining, all orbit stats, velocity, dynamic pressure
         """
+        self.flight = self.connection.add_stream(self.vessel.flight, self.vessel.surface_reference_frame)
+        self.throttle = self.connection.add_stream(getattr, self.vessel.control, 'throttle')
+        self.liquid_fuel = self.connection.add_stream(self.vessel.resources.amount, 'LiquidFuel')
+        self.oxidizer = self.connection.add_stream(self.vessel.resources.amount, 'Oxidizer')
+
+    def get_inputs(self):
+        flight_snapshot = self.flight()
+        orbit_snapshot = self.orbit()
+        inputs = [flight_snapshot.heading, flight_snapshot.pitch, flight_snapshot.roll, flight_snapshot.speed,
+                  flight_snapshot.horizontal_speed, flight_snapshot.vertical_speed, self.throttle(),
+                  min(self.liquid_fuel(), self.oxidizer()), orbit_snapshot.apoapsis_altitude,
+                  orbit_snapshot.periapsis_altitude, orbit_snapshot.inclination, orbit_snapshot.eccentricity,
+                  flight_snapshot.dynamic_pressure]
+        return inputs
 
     def get_situation(self):
         return self.situation()
@@ -39,8 +53,7 @@ class RocketData:
         return orbit.apoapsis_altitude, orbit.periapsis_altitude, orbit.inclination, orbit.eccentricity
 
     def get_remaining_fuel(self):
-        return [self.vessel.resourses.amount["LiquidFuel"], self.vessel.resourses.amount["Oxidizer"],
-                self.vessel.resourses.amount["ElectricCharge"]]
+        return min(self.liquid_fuel, self.oxidizer)
 
     def is_valid_flight(self) -> bool:
         # zero altitude after x time condition

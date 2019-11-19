@@ -16,12 +16,13 @@ class GameController:
         """Reload game (name is SHgame)"""
         self.connection.space_center.load("SHgame")
         # do we have to recreate rocket controller?
-        self.rocket_controller.update_controls(
-            self.rocket_controller.control.pitch,
-            self.rocket_controller.vessel.flight().heading,
-            self.rocket_controller.control.roll,
-            self.rocket_controller.control.throttle,
-        )
+        # self.rocket_controller.update_controls(
+        #     self.rocket_controller.control.pitch,
+        #     self.rocket_controller.vessel.flight().heading,
+        #     self.rocket_controller.control.roll,
+        #     self.rocket_controller.control.throttle,
+        # )
+        self.rocket_controller.set_throttle(1.0)
 
     def launch(self, rocket_data:RocketData):
         """Set up launch for AI"""

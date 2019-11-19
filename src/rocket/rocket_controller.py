@@ -26,24 +26,22 @@ class RocketController:
 
         self.auto_pilot.engage()
 
-    def update_controls(self, pitch, heading, roll, throttle, sas=False, rcs=False):
+    def update_controls(self, outputs, rocket_data):
         """
-        TODO: Implement comments
-        :param pitch:
-        :param heading:
-        :param roll:
-        :param throttle:
-        :param sas:
-        :param rcs:
-        :param landing_gear:
-        :return:
+        This function is based off of the implementation by nonprofitgibi
+        https://github.com/nonprofitgibi/PythonLearnsKSP/blob/master/GeneticAlgorithm/ksp.py
+        Updates the controls to change how the ship is flying.
+        :param rocket_data: The rocket data that will be updated if a stage occurs.
+        :param outputs: the list of outputs from the activation function.
+        :return: None
         """
+        heading = outputs[0] * 360
+        pitch = outputs[1] - 0.5 * 180
+        throttle = outputs[2]
         self.auto_pilot.target_pitch_and_heading(pitch, heading)
-        self.control.roll = roll
         self.control.throttle = throttle
-        self.control.sas = sas
-        self.control.rcs = rcs
-
+        if outputs[3] > 0.5:
+            self.stage_rocket(rocket_data)
     def stage_rocket(self, rocket_data:RocketData):
         """
         TODO implement comments
@@ -51,5 +49,8 @@ class RocketController:
         """
         self.control.activate_next_stage()
         rocket_data.stage -= 1
+
+    def set_throttle(self, throttle):
+        self.control.throttle = throttle
 
 
