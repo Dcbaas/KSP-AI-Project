@@ -20,7 +20,7 @@ class RocketData:
         Inputs
         pitch, heading, roll, throttle, fuel remaining, all orbit stats, velocity, dynamic pressure
         """
-        self.flight = self.connection.add_stream(self.vessel.flight, self.vessel.surface_reference_frame)
+        self.flight = self.connection.add_stream(self.vessel.flight, self.orbit().body.reference_frame)
         self.throttle = self.connection.add_stream(getattr, self.vessel.control, 'throttle')
         self.liquid_fuel = self.connection.add_stream(self.vessel.resources.amount, 'LiquidFuel')
         self.oxidizer = self.connection.add_stream(self.vessel.resources.amount, 'Oxidizer')
@@ -56,22 +56,31 @@ class RocketData:
         return min(self.liquid_fuel, self.oxidizer)
 
     def is_valid_flight(self) -> bool:
+        flight_snapshot = self.flight()
+        orbit_snapshot = self.orbit()
+
         # zero altitude after x time condition
-        if self.vessel.met > 10 and self.situation() == self.situation().pre_launch:
+        if self.vessel.met > 10 and flight_snapshot.speed == 0:
+            print('Rocket never left')
             return False
 
         # vessel not in ocean condition
-        if (self.situation() == self.situation().docked
-                and self.situation() == self.situation().landed
-                and self.situation() == self.situation().splashed):
+        if self.vessel.met > 10 and (self.situation() == self.situation().docked
+                or self.situation() == self.situation().landed
+                or self.situation() == self.situation().splashed):
+            print('Rocket not flying anymore')
             return False
 
         # zero fuel condition
-        if (self.vessel.resourses.amount["LiquidFuel"] == 0
-                or self.vessel.resourses.amount["Oxidizer"] == 0):
+        if min(self.liquid_fuel(), self.oxidizer()) == 0:
+            print('Rocket out of fuel')
             return False
 
         return True
 
     def get_closest_approach(self):
         return self.mun_target.orbit.distance_at_closest_approach(self.orbit())
+
+    def get_horizontal_speed(self):
+        flight_snapshot = self.flight()
+        return flight_snapshot.horizontal_speed

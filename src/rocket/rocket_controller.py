@@ -38,6 +38,7 @@ class RocketController:
         heading = outputs[0] * 360
         pitch = outputs[1] - 0.5 * 180
         throttle = outputs[2]
+        # print(throttle)
         self.auto_pilot.target_pitch_and_heading(pitch, heading)
         self.control.throttle = throttle
         if outputs[3] > 0.5:

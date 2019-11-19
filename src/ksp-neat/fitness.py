@@ -16,6 +16,15 @@ DISTANCE_TOLERANCE = 1000
 TARGET_SPEED = 0.5
 
 
+def update_monitor(rocket_data, monitor):
+    orbit_data = rocket_data.get_orbit_data()
+    monitor.set_max_horizontal_speed(rocket_data.get_horizontal_speed())
+    monitor.set_max_pe(orbit_data[1])
+    monitor.set_max_ap(orbit_data[0])
+    monitor.set_best_inclination(orbit_data[2])
+    monitor.set_best_eccentricity(orbit_data[3])
+
+
 def score_altitude(altitude):
     """
     Score the altitude. The goal is to reach but not surpass the target altitude.
@@ -42,10 +51,17 @@ def score_eccentricity(eccentricity):
     return 1 / eccentricity
 
 
+def score_horizontal_speed(speed):
+    if speed > 2000:
+        return 2000
+    return speed
+
+
 def calc_fitness(monitor: Monitor):
     """
     """
-    score = score_altitude(monitor.max_ap) + score_altitude(monitor.max_pe) + score_inclination(
+    score = score_horizontal_speed(monitor.max_horizontal_speed) + score_altitude(monitor.max_ap) + score_altitude(
+        monitor.max_pe) + score_inclination(
         monitor.best_inclination) + \
             score_eccentricity(monitor.best_eccentricity)
 
@@ -67,13 +83,15 @@ def eval_genomes(genomes, config):
         net = neat.nn.RecurrentNetwork.create(genome, config)
         game_controller.restart()  # load game
         monitor = Monitor()
-        monitor.set_final_situation(rocket_controller.vessel.situation)
         time.sleep(10)  # TODO: determine time for game to load
         game_controller.launch(rocket_data)  # prepare to fly
         start = time.time()
         elapsed = 0
-        while elapsed < 60 and still_valid():  # TODO: add failure condition, set time correctly (currently 60 secs)
+        while elapsed < 1200 and rocket_data.is_valid_flight():
             #  fly ship!
             rocket_controller.update_controls(net.activate(rocket_data.get_inputs()), rocket_data)
+            update_monitor(rocket_data, monitor)
             elapsed = time.time() - start
-        genome.fitness = calc_fitness(monitor)
+        score = calc_fitness(monitor)
+        print(score)
+        genome.fitness = score
