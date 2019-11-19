@@ -52,6 +52,10 @@ def calc_fitness(monitor: Monitor):
     return score
 
 
+def still_valid():
+    return True
+
+
 def eval_genomes(genomes, config):
     """Executes genome actions and sets their resulting fitness"""
     connection = krpc.connect(name='distance_test')
@@ -68,7 +72,8 @@ def eval_genomes(genomes, config):
         game_controller.launch(rocket_data)  # prepare to fly
         start = time.time()
         elapsed = 0
-        while elapsed < 60:  # TODO: add failure condition, set time correctly (currently 60 secs)
+        while elapsed < 60 and still_valid():  # TODO: add failure condition, set time correctly (currently 60 secs)
             #  fly ship!
-            genome.fitness = calc_fitness(monitor)  # where does the score come from?
+            rocket_controller.update_controls(net.activate(rocket_data.get_inputs()), rocket_data)
             elapsed = time.time() - start
+        genome.fitness = calc_fitness(monitor)
