@@ -76,6 +76,11 @@ class RocketData:
             print('Rocket out of fuel')
             return False
 
+        # If rocket is ballistic. As in flying towards the ground
+        if flight_snapshot.pitch < -5 and flight_snapshot.mean_altitude < 70000:
+            print('Went Ballistic')
+            return False
+
         return True
 
     def get_closest_approach(self):
