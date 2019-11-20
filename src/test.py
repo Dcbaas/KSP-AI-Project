@@ -16,7 +16,7 @@ def run(config_file, isCheckpoint:bool):
     """Sets up nn with specified config and statistic output"""
 
     if isCheckpoint:
-        p = neat.Checkpointer.restore(config_file)
+        p = neat.Checkpointer.restore_checkpoint(config_file)
     else:
         # Load config
         config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
