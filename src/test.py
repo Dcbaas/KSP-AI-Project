@@ -8,19 +8,23 @@ import krpc
 from stats_monitor import Monitor
 import fitness
 import os
+import sys
 import neat
 
 
-def run(config_file):
+def run(config_file, isCheckpoint:bool):
     """Sets up nn with specified config and statistic output"""
 
-    # Load config
-    config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
-                         neat.DefaultSpeciesSet, neat.DefaultStagnation,
-                         config_file)
+    if isCheckpoint:
+        p = neat.Checkpointer.restore(config_file)
+    else:
+        # Load config
+        config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
+                             neat.DefaultSpeciesSet, neat.DefaultStagnation,
+                             config_file)
 
-    # Create the population, which is the top-level object for a NEAT run.
-    p = neat.Population(config)
+        # Create the population, which is the top-level object for a NEAT run.
+        p = neat.Population(config)
 
     # Add a stdout reporter to show progress in the terminal.
     p.add_reporter(neat.StdOutReporter(True))
@@ -40,23 +44,12 @@ if __name__ == '__main__':
     # here so that the script will run successfully regardless of the
     # current working directory.
     local_dir = os.path.dirname(__file__)
-    config_path = os.path.join(local_dir, 'ksp-neat/NeatConfig.cfg')
-    run(config_path)
+    if len(sys.argv) == 2:
+        config_path = os.path.join(local_dir, sys.argv[1])
+        run(config_path, True)
+    else:
+        config_path = os.path.join(local_dir, 'ksp-neat/NeatConfig.cfg')
+        run(config_path)
 
 
-def update_monitor(monitor, rocket_data:RocketData):
-    orbit_data = rocket_data.get_orbit_data()
-    dist_from_target =  rocket_data.get_distance()
-    closest_approach = rocket_data.get_closest_approach()
-    speed = rocket_data.get_speed()
-    situation = rocket_data.get_situation()
-
-    # Set the values
-    monitor.set_closest_landing_dist(dist_from_target)
-    monitor.set_closest_approach(closest_approach)
-    monitor.set_lowest_speed_at_touchdown(speed)
-    monitor.set_final_situation(situation)
-    monitor.set_max_ap(orbit_data[1])
-    monitor.set_max_pe(orbit_data[2])
-    monitor.set_body_name(orbit_data[0])
 
