@@ -1,9 +1,14 @@
 import pyautogui
+import krpc
 import time
+import os
+
 
 class MemoryManager:
-    def __init__(self, btn_location_dic = None, move_duration = 0.25, run_limit = 50):
-        pyautogui.PAUSE = 3
+    EXEC_PATH = 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\KSP_x64.exe'
+
+
+    def __init__(self, btn_location_dic=None):
         pyautogui.FAILSAFE = True
 
         if btn_location_dic is None:
@@ -12,19 +17,13 @@ class MemoryManager:
         self.QUIT_BTN_LOCATION = btn_location_dic['quit_btn']
         self.BACK_BTN_LOCATION = btn_location_dic['back_btn']
         self.FINAL_QUIT_BTN = btn_location_dic['final_quit_btn']
+        self.START_BTN = btn_location_dic['start_btn']
+        self.RESUME_BTN = btn_location_dic['resume_btn']
+        self.SAVE_GAME_BTN = btn_location_dic['save_game_btn']
         self.QUIT_TO_MAIN_BTN_LOCATION = btn_location_dic['quit_to_main_btn']
-        self.MOVE_DURATION = move_duration
-        self.RUN_LIMIT = run_limit
-
-        self.run_round = 0
-
-    def reload_ksp(self):
-        pyautogui.keyDown('f9')
-        time.sleep(3.0)
-        pyautogui.keyUp('f9')
 
     def restart_ksp(self):
-        self.reload_ksp()
+        pyautogui.PAUSE = .75
         print('Quitting to Main Menu')
         pyautogui.press('esc')
 
@@ -33,6 +32,7 @@ class MemoryManager:
         pyautogui.click()
 
         print('Exiting')
+        pyautogui.PAUSE = 4
         x, y = self.BACK_BTN_LOCATION
         pyautogui.moveTo(x, y)
         pyautogui.click()
@@ -45,17 +45,26 @@ class MemoryManager:
         pyautogui.moveTo(x, y)
         pyautogui.click()
 
-        # TODO: Finish this off. Need to restart game and navigate back to running game.
+        os.system(self.EXEC_PATH)
+
+        x, y = self.START_BTN
+        pyautogui.moveTo(x, y)
+        pyautogui.click()
+
+        x,y = self.RESUME_BTN
+        pyautogui.moveTo(x, y)
+        pyautogui.click()
+
+        x, y = self.SAVE_GAME_BTN
+        pyautogui.moveTo(x, y)
+        pyautogui.click(x, y)
+
         print('Sequence Finished')
-        
+
 if __name__ == "__main__":
     btn_loc_dictionary = {'quit_btn': (625, 838), 'back_btn': (728, 950), 'quit_to_main_btn': (1035, 608),
-    'final_quit_btn': (960, 570)}
+                          'final_quit_btn': (960, 570)}
     memObj = MemoryManager(btn_location_dic=btn_loc_dictionary)
     print('Switch to ksp')
     time.sleep(4)
     memObj.restart_ksp()
-
-        
-
-

@@ -22,7 +22,7 @@ class GameController:
         #     self.rocket_controller.control.roll,
         #     self.rocket_controller.control.throttle,
         # )
-        self.rocket_controller.set_throttle(1.0)
+        # self.rocket_controller.set_throttle(1.0)
 
     def launch(self, rocket_data:RocketData):
         """Set up launch for AI"""

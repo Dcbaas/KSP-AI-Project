@@ -7,6 +7,7 @@ from game_controller import GameController
 from rocket import RocketController
 from stats_monitor import Monitor
 from rocket_data_tracker import RocketData
+from MemoryManager import MemoryManager
 
 EIGHTH_VALUE = 250000
 QUARTER_VALUE = 500000
@@ -74,16 +75,33 @@ def still_valid():
 
 def eval_genomes(genomes, config):
     """Executes genome actions and sets their resulting fitness"""
+    RESTART_LIMIT = 30
+    current_restarts = 0
     connection = krpc.connect(name='distance_test')
-    rocket_data = RocketData(connection)
-    rocket_controller = RocketController(connection.space_center.active_vessel)
-    game_controller = GameController(connection, rocket_controller)
+
+    # rocket_data = RocketData(connection)
+    # rocket_controller = RocketController(connection.space_center.active_vessel)
+    # game_controller = GameController(connection, rocket_controller)
+    mem_manager = MemoryManager()
     for genome_id, genome in genomes:
+        current_restarts = current_restarts + 1
+        if current_restarts == RESTART_LIMIT:
+            # Reset game
+            connection.close()
+            mem_manager.restart_ksp()
+            connection = krpc.connect(name='distance_test')
+            game_controller.restart()
+
         # recurrent nn allows us to go back to previous decisions and iterate
         net = neat.nn.RecurrentNetwork.create(genome, config)
         game_controller.restart()  # load game
+        time.sleep(5)
+
+        rocket_data = RocketData(connection)
+        rocket_controller = RocketController(connection.space_center.active_vessel)
+        game_controller = GameController(connection, rocket_controller)
         monitor = Monitor()
-        time.sleep(10)  # TODO: determine time for game to load
+
         game_controller.launch(rocket_data)  # prepare to fly
         start = time.time()
         elapsed = 0
