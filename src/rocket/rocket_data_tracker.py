@@ -77,7 +77,9 @@ class RocketData:
             return False
 
         # If rocket is ballistic. As in flying towards the ground
-        if flight_snapshot.pitch < -5 and flight_snapshot.mean_altitude < 70000:
+        print(flight_snapshot.pitch)
+        print(self.vessel.control.pitch)
+        if flight_snapshot.pitch < 0 and flight_snapshot.mean_altitude < 70000:
             print('Went Ballistic')
             return False
 

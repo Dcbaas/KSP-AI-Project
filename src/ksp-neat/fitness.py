@@ -75,15 +75,17 @@ def still_valid():
 def eval_genomes(genomes, config):
     """Executes genome actions and sets their resulting fitness"""
     connection = krpc.connect(name='distance_test')
-    rocket_data = RocketData(connection)
-    rocket_controller = RocketController(connection.space_center.active_vessel)
-    game_controller = GameController(connection, rocket_controller)
     for genome_id, genome in genomes:
         # recurrent nn allows us to go back to previous decisions and iterate
         net = neat.nn.RecurrentNetwork.create(genome, config)
-        game_controller.restart()  # load game
+        connection.space_center.load("SHgame")
+        time.sleep(5)
+
+        rocket_data = RocketData(connection)
+        rocket_controller = RocketController(connection.space_center.active_vessel)
+        game_controller = GameController(connection, rocket_controller)
         monitor = Monitor()
-        time.sleep(10)  # TODO: determine time for game to load
+
         game_controller.launch(rocket_data)  # prepare to fly
         start = time.time()
         elapsed = 0

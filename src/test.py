@@ -49,7 +49,7 @@ if __name__ == '__main__':
         run(config_path, True)
     else:
         config_path = os.path.join(local_dir, 'ksp-neat/NeatConfig.cfg')
-        run(config_path)
+        run(config_path, False)
 
 
 
