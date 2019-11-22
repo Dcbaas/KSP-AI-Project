@@ -28,11 +28,11 @@ class RocketData:
     def get_inputs(self):
         flight_snapshot = self.flight()
         orbit_snapshot = self.orbit()
-        inputs = [flight_snapshot.heading, flight_snapshot.pitch, flight_snapshot.roll, flight_snapshot.speed,
-                  flight_snapshot.horizontal_speed, flight_snapshot.vertical_speed, self.throttle(),
-                  min(self.liquid_fuel(), self.oxidizer()), orbit_snapshot.apoapsis_altitude,
-                  orbit_snapshot.periapsis_altitude, orbit_snapshot.inclination, orbit_snapshot.eccentricity,
-                  flight_snapshot.dynamic_pressure]
+        inputs = [flight_snapshot.heading / 360, flight_snapshot.pitch / 90, flight_snapshot.roll / 360, flight_snapshot.speed / 2000,
+                  flight_snapshot.horizontal_speed / 2000, flight_snapshot.vertical_speed / 1000, self.throttle(),
+                  min(self.liquid_fuel(), self.oxidizer())/100, orbit_snapshot.apoapsis_altitude / 100000,
+                  orbit_snapshot.periapsis_altitude /100000, orbit_snapshot.inclination, orbit_snapshot.eccentricity,
+                  flight_snapshot.dynamic_pressure / 1000]
         return inputs
 
     def get_situation(self):
