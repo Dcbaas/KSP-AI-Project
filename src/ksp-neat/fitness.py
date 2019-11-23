@@ -79,10 +79,8 @@ def eval_genomes(genomes, config):
     current_restarts = 0
     connection = krpc.connect(name='distance_test')
 
-    # rocket_data = RocketData(connection)
-    # rocket_controller = RocketController(connection.space_center.active_vessel)
-    # game_controller = GameController(connection, rocket_controller)
     mem_manager = MemoryManager()
+
     for genome_id, genome in genomes:
         current_restarts = current_restarts + 1
         if current_restarts == RESTART_LIMIT:
@@ -94,7 +92,8 @@ def eval_genomes(genomes, config):
 
         # recurrent nn allows us to go back to previous decisions and iterate
         net = neat.nn.RecurrentNetwork.create(genome, config)
-        game_controller.restart()  # load game
+
+        connection.space_center.load("SHgame")
         time.sleep(5)
 
         rocket_data = RocketData(connection)

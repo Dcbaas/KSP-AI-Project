@@ -2,6 +2,7 @@ import krpc
 import numpy as np
 import numpy.linalg as la
 import time
+import math
 from typing import List
 
 
@@ -15,6 +16,7 @@ class RocketData:
         self.orbit = self.connection.add_stream(getattr, self.vessel, 'orbit')
         self.parts_list = [(p.name, p.decouple_stage) for p in self.vessel.parts.all]
         self.stage = max(p.decouple_stage for p in self.vessel.parts.all)
+        self.direction = self.connection.add_stream(self.vessel.direction, self.vessel.surface_reference_frame)
 
         """
         Inputs
@@ -28,11 +30,11 @@ class RocketData:
     def get_inputs(self):
         flight_snapshot = self.flight()
         orbit_snapshot = self.orbit()
-        inputs = [flight_snapshot.heading, flight_snapshot.pitch, flight_snapshot.roll, flight_snapshot.speed,
-                  flight_snapshot.horizontal_speed, flight_snapshot.vertical_speed, self.throttle(),
-                  min(self.liquid_fuel(), self.oxidizer()), orbit_snapshot.apoapsis_altitude,
-                  orbit_snapshot.periapsis_altitude, orbit_snapshot.inclination, orbit_snapshot.eccentricity,
-                  flight_snapshot.dynamic_pressure]
+        inputs = [flight_snapshot.heading / 360, flight_snapshot.pitch / 90, flight_snapshot.roll / 360, flight_snapshot.speed / 2000,
+                  flight_snapshot.horizontal_speed / 2000, flight_snapshot.vertical_speed / 1000, self.throttle(),
+                  min(self.liquid_fuel(), self.oxidizer())/100, orbit_snapshot.apoapsis_altitude / 100000,
+                  orbit_snapshot.periapsis_altitude /100000, orbit_snapshot.inclination, orbit_snapshot.eccentricity,
+                  flight_snapshot.dynamic_pressure / 1000]
         return inputs
 
     def get_situation(self):
@@ -58,6 +60,7 @@ class RocketData:
     def is_valid_flight(self) -> bool:
         flight_snapshot = self.flight()
         orbit_snapshot = self.orbit()
+        direction_snapshot = np.array(self.direction())
 
         # zero altitude after x time condition
         if self.vessel.met > 10 and flight_snapshot.speed == 0:
@@ -77,7 +80,12 @@ class RocketData:
             return False
 
         # If rocket is ballistic. As in flying towards the ground
-        if flight_snapshot.pitch < -5 and flight_snapshot.mean_altitude < 70000:
+        horizontal_direction = np.array((0, direction_snapshot[1], direction_snapshot[2]))
+        pitch = self.angle_between_vectors(direction_snapshot, horizontal_direction)
+        if direction_snapshot[0] < 0:
+            pitch = -pitch
+        print(pitch)
+        if pitch < 0 and flight_snapshot.mean_altitude < 70000:
             print('Went Ballistic')
             return False
 
@@ -89,3 +97,27 @@ class RocketData:
     def get_horizontal_speed(self):
         flight_snapshot = self.flight()
         return flight_snapshot.horizontal_speed
+
+    def angle_between_vectors(self, u, v):
+        """
+        Get the angle between two vectors. Used to get the
+        pitch of the ship. Code was written by David Wolever.
+        It was the best solution we found. Better than anything else we could think of.
+        :param u:
+        :param v:
+        :return:
+        """
+        vec1_unit = self.get_unit_vector(u)
+        vec2_unit = self.get_unit_vector(v)
+        return np.arccos(np.clip(np.dot(vec1_unit, vec2_unit), -1.0, 1.0)) * (180/math.pi)
+
+    def get_unit_vector(self, vector):
+        """
+        Gets the unit vector of a single direction vector.
+        Part of getting the angle between vectors. This code came from a stack overflow user David Wolever
+        This solution was better then anything else we could dream up.
+        https://stackoverflow.com/questions/2827393/angles-between-two-n-dimensional-vectors-in-python
+        :param vector:
+        :return:
+        """
+        return vector / la.norm(vector)
