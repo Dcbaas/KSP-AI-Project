@@ -85,6 +85,8 @@ def eval_genomes(genomes, config):
     mem_manager = MemoryManager(btn_location_dic=btn_mapping_dic)
 
     for genome_id, genome in genomes:
+        connection.space_center.load("SHgame")
+        time.sleep(5)
         current_restarts = current_restarts + 1
         if current_restarts == RESTART_LIMIT:
             # Reset game
@@ -97,8 +99,8 @@ def eval_genomes(genomes, config):
         # recurrent nn allows us to go back to previous decisions and iterate
         net = neat.nn.RecurrentNetwork.create(genome, config)
 
-        connection.space_center.load("SHgame")
-        time.sleep(5)
+        # connection.space_center.load("SHgame")
+        # time.sleep(5)
 
         rocket_data = RocketData(connection)
         rocket_controller = RocketController(connection.space_center.active_vessel)

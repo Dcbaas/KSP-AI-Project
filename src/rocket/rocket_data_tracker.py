@@ -84,7 +84,7 @@ class RocketData:
         pitch = self.angle_between_vectors(direction_snapshot, horizontal_direction)
         if direction_snapshot[0] < 0:
             pitch = -pitch
-        print(pitch)
+        # print(pitch)
         if pitch < 0 and flight_snapshot.mean_altitude < 70000:
             print('Went Ballistic')
             return False
