@@ -58,6 +58,7 @@ class MemoryManager:
         x, y = self.SAVE_GAME_BTN
         pyautogui.moveTo(x, y)
         pyautogui.click(x, y)
+        pyautogui.click(x, y)
 
         print('Sequence Finished')
 
