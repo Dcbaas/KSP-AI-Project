@@ -2,10 +2,11 @@ import pyautogui
 import krpc
 import time
 import os
+import subprocess
 
 
 class MemoryManager:
-    EXEC_PATH = 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\KSP_x64.exe'
+    EXEC_PATH = '"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\KSP_x64.exe"'
 
 
     def __init__(self, btn_location_dic=None):
@@ -45,8 +46,10 @@ class MemoryManager:
         pyautogui.moveTo(x, y)
         pyautogui.click()
 
-        os.system(self.EXEC_PATH)
+        subprocess.Popen(self.EXEC_PATH)
+        time.sleep(60)
 
+        print('Starting the game')
         x, y = self.START_BTN
         pyautogui.moveTo(x, y)
         pyautogui.click()

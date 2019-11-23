@@ -80,7 +80,7 @@ def eval_genomes(genomes, config):
     """Executes genome actions and sets their resulting fitness"""
     RESTART_LIMIT = 3
     current_restarts = 0
-    connection = krpc.connect(name='distance_test')
+    connection = krpc.connect(name='ai_server')
 
     mem_manager = MemoryManager(btn_location_dic=btn_mapping_dic)
 
