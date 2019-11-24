@@ -16,9 +16,9 @@ TARGET_CLOSEST_APPROACH = 500000
 DISTANCE_TOLERANCE = 1000
 TARGET_SPEED = 0.5
 
-btn_mapping_dic = { 'quit_btn': (1729, 1290), 'back_btn': (1811, 1391), 'final_quit_btn': (2017, 1075),
-                    'start_btn': (1737, 1032), 'resume_btn': (1819, 973),
-                    'save_game_btn': (2014, 869), 'quit_to_main_btn': (2103, 1116)}
+btn_mapping_dic = { 'quit_btn': (1665, 1339), 'back_btn': (1720, 1435), 'final_quit_btn': (1916, 1022),
+                    'start_btn': (1665, 1075), 'resume_btn': (1705, 1018),
+                    'save_game_btn': (1899, 909), 'quit_to_main_btn': (2103, 1168)}
 
 def update_monitor(rocket_data, monitor):
     orbit_data = rocket_data.get_orbit_data()
@@ -78,7 +78,7 @@ def still_valid():
 
 def eval_genomes(genomes, config):
     """Executes genome actions and sets their resulting fitness"""
-    RESTART_LIMIT = 3
+    RESTART_LIMIT = 100
     current_restarts = 0
     connection = krpc.connect(name='ai_server')
 
@@ -88,13 +88,13 @@ def eval_genomes(genomes, config):
         connection.space_center.load("SHgame")
         time.sleep(5)
         current_restarts = current_restarts + 1
-        if current_restarts == RESTART_LIMIT:
-            # Reset game
-            connection.close()
-            mem_manager.restart_ksp()
-            connection = krpc.connect(name='distance_test')
-            game_controller.restart()
-            current_restarts = 0
+       # if current_restarts == RESTART_LIMIT:
+           # Reset game
+         #   connection.close()
+        #    mem_manager.restart_ksp()
+         #   connection = krpc.connect(name='distance_test')
+          #  game_controller.restart()
+           # current_restarts = 0
 
         # recurrent nn allows us to go back to previous decisions and iterate
         net = neat.nn.RecurrentNetwork.create(genome, config)
