@@ -20,7 +20,7 @@ class TimeWarpHelper:
         """
         Warps the rocket towards the Mun. The trigger for exiting the warp helper was a when the rocket left the
         sphere of influence of Kerbin.
-        :return: void 
+        :return: void
         """
         space_center = self.connection.space_center
         vessel_orbit = space_center.active_vessel.orbit
