@@ -86,9 +86,9 @@ class RocketData:
         pitch = self.angle_between_vectors(direction_snapshot, horizontal_direction)
         if direction_snapshot[0] < 0:
             pitch = -pitch
-        # print(pitch)
-        if pitch < 0 and flight_snapshot.mean_altitude < 70000:
-            print('Went Ballistic')
+        # To Santiago. We can't have the failure condition be at 0. We need a tolerance to allow it to fly at 0
+        if pitch < -3 and flight_snapshot.mean_altitude < 70000:
+            print(f'Went Ballistic with pitch{pitch} at altitude {flight_snapshot.mean_altitude}')
             return False
 
         return True

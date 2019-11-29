@@ -33,7 +33,7 @@ def run(config_file, isCheckpoint:bool):
     p.add_reporter(neat.Checkpointer(5))
 
     # Run for up to 300 generations.
-    winner = p.run(fitness.eval_genomes, 300)
+    winner = p.run(fitness.eval_genomes,  1500)
 
     # Display the winning genome.
     print('\nBest genome:\n{!s}'.format(winner))
