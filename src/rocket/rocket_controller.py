@@ -30,7 +30,8 @@ class RocketController:
         """
         This function is based off of the implementation by nonprofitgibi
         https://github.com/nonprofitgibi/PythonLearnsKSP/blob/master/GeneticAlgorithm/ksp.py
-        Updates the controls to change how the ship is flying.
+        Updates the controls to change how the ship is flying. Sets the heading, pitch, and throttle.
+        Will stage the rocket if deemed necessary.
         :param rocket_data: The rocket data that will be updated if a stage occurs.
         :param outputs: the list of outputs from the activation function.
         :return: None
@@ -43,15 +44,12 @@ class RocketController:
         self.control.throttle = throttle
         if outputs[3] > 0.5:
             self.stage_rocket(rocket_data)
+
     def stage_rocket(self, rocket_data:RocketData):
         """
-        TODO implement comments
-        :return:
+        Stages the rocket by one stage. Updates the stage value tracked by the rocket data object.
+        :param rocket_data: The rocket data object being updated if a stage occurs.
+        :return: None.
         """
         self.control.activate_next_stage()
         rocket_data.stage -= 1
-
-    def set_throttle(self, throttle):
-        self.control.throttle = throttle
-
-
