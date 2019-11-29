@@ -9,13 +9,10 @@ from stats_monitor import Monitor
 from rocket_data_tracker import RocketData
 from MemoryManager import MemoryManager
 
-EIGHTH_VALUE = 250000
-QUARTER_VALUE = 500000
-START_POINTS = 2000000
-TARGET_CLOSEST_APPROACH = 500000
-DISTANCE_TOLERANCE = 1000
-TARGET_SPEED = 0.5
-
+"""
+When we tried working on a memory manager to automatically close and restart KSP, these were the screen locations
+for clicking around the screen to exit and restart the game. 
+"""
 btn_mapping_dic = { 'quit_btn': (1665, 1339), 'back_btn': (1720, 1435), 'final_quit_btn': (1916, 1022),
                     'start_btn': (1665, 1075), 'resume_btn': (1705, 1018),
                     'save_game_btn': (1899, 909), 'quit_to_main_btn': (2103, 1168)}

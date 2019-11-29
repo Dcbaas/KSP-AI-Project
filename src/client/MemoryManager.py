@@ -6,10 +6,24 @@ import subprocess
 
 
 class MemoryManager:
+    """
+    This class was supposed to be the memory manager for automattically closing and restarting Kerbal Space Program
+    It was meant to allow us to start the simulation and just leave it alone while we waited for results.
+
+    Unfortuantly When we went to implement the system on the target machine we encoutered problems with the mouse
+    clicks not interacting with Kerbal Space Program properly. We didn't have time to troubleshoot the problem
+    so an automatic restart function was abandoned.
+    """
     EXEC_PATH = '"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\KSP_x64.exe"'
 
 
     def __init__(self, btn_location_dic=None):
+        """
+        Initialized the memory managment object. The object was initialized with a dictionary contianing the x,y values
+        for locations to click buttons within KSP.
+
+        :param btn_location_dic: The locations on the screen where to click buttons in KSP.
+        """
         pyautogui.FAILSAFE = True
 
         if btn_location_dic is None:
@@ -24,6 +38,12 @@ class MemoryManager:
         self.QUIT_TO_MAIN_BTN_LOCATION = btn_location_dic['quit_to_main_btn']
 
     def restart_ksp(self):
+        """
+        The method used to restart KSP. Went through all the mouse clicks to close down and restart KSP.
+        For restarting the game itself we used the subprocess library to start a new ksp process. This allowed to
+        avoid one more mouse click.
+        :return: Void
+        """
         pyautogui.PAUSE = .75
         print('Quitting to Main Menu')
         pyautogui.press('esc')
@@ -79,12 +99,3 @@ class MemoryManager:
         pyautogui.click(x, y)
 
         print('Sequence Finished')
-
-if __name__ == "__main__":
-    print("other coordinate system")
-    btn_loc_dictionary = {'quit_btn': (625, 838), 'back_btn': (728, 950), 'quit_to_main_btn': (1035, 608),
-                          'final_quit_btn': (960, 570)}
-    memObj = MemoryManager(btn_location_dic=btn_loc_dictionary)
-    print('Switch to ksp')
-    time.sleep(4)
-    memObj.restart_ksp()
