@@ -7,6 +7,7 @@ from game_controller import GameController
 from rocket import RocketController
 from stats_monitor import Monitor
 from rocket_data_tracker import RocketData
+from MemoryManager import MemoryManager
 
 EIGHTH_VALUE = 250000
 QUARTER_VALUE = 500000
@@ -15,6 +16,9 @@ TARGET_CLOSEST_APPROACH = 500000
 DISTANCE_TOLERANCE = 1000
 TARGET_SPEED = 0.5
 
+btn_mapping_dic = { 'quit_btn': (1665, 1339), 'back_btn': (1720, 1435), 'final_quit_btn': (1916, 1022),
+                    'start_btn': (1665, 1075), 'resume_btn': (1705, 1018),
+                    'save_game_btn': (1899, 909), 'quit_to_main_btn': (2103, 1168)}
 
 def update_monitor(rocket_data, monitor):
     """
@@ -97,7 +101,7 @@ def calc_fitness(monitor: Monitor):
     return score
 
 def eval_genomes(genomes, config):
-    """
+      """
     Executes genome actions and sets their resulting fitness. This is the main driver of the AI program.
     This section is where the rocket is flown and at failure the genome is evaluated.
 
@@ -105,12 +109,19 @@ def eval_genomes(genomes, config):
     :param config: The config file that sets the parameters for this simulation
     :return: None
     """
-    connection = krpc.connect(name='distance_test')
+    RESTART_LIMIT = 100
+    current_restarts = 0
+    connection = krpc.connect(name='ai_server')
+
+    mem_manager = MemoryManager(btn_location_dic=btn_mapping_dic)
+
     for genome_id, genome in genomes:
-        # recurrent nn allows us to go back to previous decisions and iterate
-        net = neat.nn.RecurrentNetwork.create(genome, config)
         connection.space_center.load("SHgame")
         time.sleep(5)
+        current_restarts = current_restarts + 1
+
+        # recurrent nn allows us to go back to previous decisions and iterate
+        net = neat.nn.RecurrentNetwork.create(genome, config)
 
         rocket_data = RocketData(connection)
         rocket_controller = RocketController(connection.space_center.active_vessel)

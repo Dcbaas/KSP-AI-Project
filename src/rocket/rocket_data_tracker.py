@@ -30,8 +30,10 @@ class RocketData:
     def get_inputs(self):
         flight_snapshot = self.flight()
         orbit_snapshot = self.orbit()
+
+
         inputs = [flight_snapshot.heading / 360, flight_snapshot.pitch / 90, flight_snapshot.roll / 360, flight_snapshot.speed / 2000,
-                  flight_snapshot.horizontal_speed / 2000, flight_snapshot.vertical_speed / 1000, self.throttle(),
+                  flight_snapshot.horizontal_speed / 500, flight_snapshot.vertical_speed / 500, self.throttle(),
                   min(self.liquid_fuel(), self.oxidizer())/100, orbit_snapshot.apoapsis_altitude / 100000,
                   orbit_snapshot.periapsis_altitude /100000, orbit_snapshot.inclination, orbit_snapshot.eccentricity,
                   flight_snapshot.dynamic_pressure / 1000]
@@ -84,9 +86,9 @@ class RocketData:
         pitch = self.angle_between_vectors(direction_snapshot, horizontal_direction)
         if direction_snapshot[0] < 0:
             pitch = -pitch
-        print(pitch)
-        if pitch < 0 and flight_snapshot.mean_altitude < 70000:
-            print('Went Ballistic')
+        # To Santiago. We can't have the failure condition be at 0. We need a tolerance to allow it to fly at 0
+        if pitch < -3 and flight_snapshot.mean_altitude < 70000:
+            print(f'Went Ballistic with pitch{pitch} at altitude {flight_snapshot.mean_altitude}')
             return False
 
         return True

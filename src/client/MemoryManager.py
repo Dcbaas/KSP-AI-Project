@@ -1,9 +1,15 @@
 import pyautogui
+import krpc
 import time
+import os
+import subprocess
+
 
 class MemoryManager:
-    def __init__(self, btn_location_dic = None, move_duration = 0.25, run_limit = 50):
-        pyautogui.PAUSE = 3
+    EXEC_PATH = '"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\KSP_x64.exe"'
+
+
+    def __init__(self, btn_location_dic=None):
         pyautogui.FAILSAFE = True
 
         if btn_location_dic is None:
@@ -12,50 +18,73 @@ class MemoryManager:
         self.QUIT_BTN_LOCATION = btn_location_dic['quit_btn']
         self.BACK_BTN_LOCATION = btn_location_dic['back_btn']
         self.FINAL_QUIT_BTN = btn_location_dic['final_quit_btn']
+        self.START_BTN = btn_location_dic['start_btn']
+        self.RESUME_BTN = btn_location_dic['resume_btn']
+        self.SAVE_GAME_BTN = btn_location_dic['save_game_btn']
         self.QUIT_TO_MAIN_BTN_LOCATION = btn_location_dic['quit_to_main_btn']
-        self.MOVE_DURATION = move_duration
-        self.RUN_LIMIT = run_limit
-
-        self.run_round = 0
-
-    def reload_ksp(self):
-        pyautogui.keyDown('f9')
-        time.sleep(3.0)
-        pyautogui.keyUp('f9')
 
     def restart_ksp(self):
-        self.reload_ksp()
+        pyautogui.PAUSE = .75
         print('Quitting to Main Menu')
         pyautogui.press('esc')
 
+
         x, y = self.QUIT_TO_MAIN_BTN_LOCATION
+        print(f"moving cursor to x: {x}, y: {y}")
         pyautogui.moveTo(x, y)
+        pyautogui.PAUSE = 4
         pyautogui.click()
 
         print('Exiting')
+        pyautogui.PAUSE = 4
         x, y = self.BACK_BTN_LOCATION
+        print(f"moving cursor to x: {x}, y: {y}")
         pyautogui.moveTo(x, y)
+        pyautogui.PAUSE = 4
         pyautogui.click()
 
         x, y = self.QUIT_BTN_LOCATION
+        print(f"moving cursor to x: {x}, y: {y}")
         pyautogui.moveTo(x, y)
+        pyautogui.PAUSE = 4
         pyautogui.click()
 
         x, y = self.FINAL_QUIT_BTN
+        print(f"moving cursor to x: {x}, y: {y}")
         pyautogui.moveTo(x, y)
+        pyautogui.PAUSE = 4
         pyautogui.click()
 
-        # TODO: Finish this off. Need to restart game and navigate back to running game.
+        subprocess.Popen(self.EXEC_PATH)
+        time.sleep(60)
+
+        print('Starting the game')
+        x, y = self.START_BTN
+        print(f"moving cursor to x: {x}, y: {y}")
+        pyautogui.moveTo(x, y)
+        pyautogui.PAUSE = 4
+        pyautogui.click()
+
+        x,y = self.RESUME_BTN
+        print(f"moving cursor to x: {x}, y: {y}")
+        pyautogui.moveTo(x, y)
+        pyautogui.PAUSE = 4
+        pyautogui.click()
+
+        x, y = self.SAVE_GAME_BTN
+        print(f"moving cursor to x: {x}, y: {y}")
+        pyautogui.moveTo(x, y)
+        pyautogui.PAUSE = 4
+        pyautogui.click(x, y)
+        pyautogui.click(x, y)
+
         print('Sequence Finished')
-        
+
 if __name__ == "__main__":
+    print("other coordinate system")
     btn_loc_dictionary = {'quit_btn': (625, 838), 'back_btn': (728, 950), 'quit_to_main_btn': (1035, 608),
-    'final_quit_btn': (960, 570)}
+                          'final_quit_btn': (960, 570)}
     memObj = MemoryManager(btn_location_dic=btn_loc_dictionary)
     print('Switch to ksp')
     time.sleep(4)
     memObj.restart_ksp()
-
-        
-
-
