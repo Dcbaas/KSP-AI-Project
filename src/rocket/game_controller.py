@@ -1,5 +1,5 @@
 #TODO: add import statements
-from rocket_data_tracker import RocketData
+from rocket.rocket_data_tracker import RocketData
 """This should provide functionality for game functions/setup. Everything dealing indirectly with the rocket."""
 
 

@@ -3,10 +3,10 @@ Genetic Algorithm for KSP
 Based off https://github.com/CodeReclaimers/neat-python/blob/master/examples/xor/evolve-feedforward.py
 NOTE: we are using a recurrent nn, and the above url will give you a feedforward example
 """
-from rocket_data_tracker import RocketData
+from rocket.rocket_data_tracker import RocketData
 import krpc
-from stats_monitor import Monitor
-import fitness
+from ksp_neat.stats_monitor import Monitor
+from ksp_neat.fitness import eval_genomes
 import os
 import sys
 import neat
@@ -33,7 +33,7 @@ def run(config_file, isCheckpoint:bool):
     p.add_reporter(neat.Checkpointer(5))
 
     # Run for up to 300 generations.
-    winner = p.run(fitness.eval_genomes,  1500)
+    winner = p.run(eval_genomes,  1500)
 
     # Display the winning genome.
     print('\nBest genome:\n{!s}'.format(winner))
