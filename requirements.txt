@@ -2,4 +2,3 @@ neat-python
 krpc
 numpy
 pyautogui
-pynput
