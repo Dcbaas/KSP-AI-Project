@@ -45,6 +45,6 @@ if __name__ == '__main__':
         config_path = os.path.join(local_dir, sys.argv[1])
         run(config_path, True)
     else:
-        config_path = os.path.join(local_dir, 'ksp-neat/NeatConfig.cfg')
+        config_path = os.path.join(local_dir, 'ksp_neat/NeatConfig.cfg')
         run(config_path, False)
 
