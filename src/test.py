@@ -3,9 +3,6 @@ Genetic Algorithm for KSP
 Based off https://github.com/CodeReclaimers/neat-python/blob/master/examples/xor/evolve-feedforward.py
 NOTE: we are using a recurrent nn, and the above url will give you a feedforward example
 """
-from rocket.rocket_data_tracker import RocketData
-import krpc
-from ksp_neat.stats_monitor import Monitor
 from ksp_neat.fitness import eval_genomes
 import os
 import sys
