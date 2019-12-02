@@ -13,7 +13,15 @@ import neat
 
 
 def run(config_file, isCheckpoint:bool):
-    """Sets up nn with specified config and statistic output"""
+    """
+    Sets up nn with specified config and statistic output
+
+    If a save file was specified when starting the program the program will load neural network data from the save.
+    Otherwise, it will use NeatConfig.cfg to load the configuration
+    :param config_file: The config file being loaded from
+    :param isCheckpoint: Flag for indicating that we are loading from a checkpoint
+    :return: None
+    """
 
     if isCheckpoint:
         p = neat.Checkpointer.restore_checkpoint(config_file)
@@ -48,6 +56,6 @@ if __name__ == '__main__':
         config_path = os.path.join(local_dir, sys.argv[1])
         run(config_path, True)
     else:
-        config_path = os.path.join(local_dir, 'ksp-neat/NeatConfig.cfg')
+        config_path = os.path.join(local_dir, 'ksp_neat/NeatConfig.cfg')
         run(config_path, False)
 
