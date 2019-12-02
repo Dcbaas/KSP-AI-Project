@@ -33,6 +33,9 @@ pip3 install -r /path/to/KSP-AI-Project/requirements.txt
 4. Load the saved game “SHgame” (or create one with this name if you don't have it)
 5. From the root folder (KSP-AI-Project) start the code using the command: 
 ```console
-python3 src/test.py src/neat-checkpoint-338
+python3 src/test.py neat-checkpoint-338
 ```
+
+   *Note:* If you are having problems with the `neat` module from PyPi `neat-python` (for example, `AttributeError: module 'neat' has no attribute 'Checkpointer'`) that means you may have conflicting neat packages. Make sure you don't have PyPi package `neat` installed. Sometimes a clean up of your pip packages and reinstalling via requirements.txt is the only solution.  
+  
 6. Watch the rocket!
