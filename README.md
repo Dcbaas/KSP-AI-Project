@@ -1,4 +1,7 @@
-### Required packages
+# KSP-AI-Project
+An attempt to get a rocket from Kerbin into orbit
+
+## Required packages
 
 Go to [requirements](requirements.txt) to view the required PyPi packages.
 Install packages onto your version of Python using the following terminal command (or install them manually if you're not a terminal kind of guy):
@@ -6,16 +9,16 @@ Install packages onto your version of Python using the following terminal comman
 pip3 install -r /path/to/KSP-AI-Project/requirements.txt
 ```
 
-### How to Run
+## How to Run
 
-#### Required Programs
-Install:
+### Required Programs
+#### Install:
 * [Kerbal Space Program](https://store.steampowered.com/app/220200/Kerbal_Space_Program/) (version 1.5.1)
 * [CKAN mod manager](https://github.com/KSP-CKAN/CKAN/releases/tag/v1.26.6)
 * Python 3
     * also pip
 
-#### After Installing
+### After Installing
 1. Revert Kerbal Space Program version to 1.5.1
     1. Under the Kerbal Space Program Tab, click the gear icon
     2. In the properties menu, select “Betas”
