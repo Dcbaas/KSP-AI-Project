@@ -3,11 +3,11 @@ import time
 import krpc
 import neat
 
-from game_controller import GameController
+from rocket.game_controller import GameController
 from rocket import RocketController
-from stats_monitor import Monitor
-from rocket_data_tracker import RocketData
-from MemoryManager import MemoryManager
+from ksp_neat.stats_monitor import Monitor
+from rocket.rocket_data_tracker import RocketData
+from client.MemoryManager import MemoryManager
 
 """
 When we tried working on a memory manager to automatically close and restart KSP, these were the screen locations
@@ -98,7 +98,7 @@ def calc_fitness(monitor: Monitor):
     return score
 
 def eval_genomes(genomes, config):
-      """
+    """
     Executes genome actions and sets their resulting fitness. This is the main driver of the AI program.
     This section is where the rocket is flown and at failure the genome is evaluated.
 

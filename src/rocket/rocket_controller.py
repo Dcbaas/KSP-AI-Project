@@ -1,5 +1,5 @@
 import krpc
-from rocket_data_tracker import RocketData
+from rocket.rocket_data_tracker import RocketData
 
 
 class RocketController:
